@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TimerPickerModal } from "react-native-timer-picker";
 import { Text, View, TouchableOpacity } from "react-native";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+import { SText, STouchableOpacity, SView } from "../components/View";
 
 const formatTime = (remainingTime: number) => {
   const hours = Math.floor(remainingTime / 3600);
@@ -19,13 +20,7 @@ export default function Index() {
   const [showPicker, setShowPicker] = useState(false);
   const [time, setTime] = useState(600);
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <SView className="items-center flex-1 justify-center">
       <TouchableOpacity
         onPress={() => {
           setShowPicker(!showPicker);
@@ -40,13 +35,27 @@ export default function Index() {
           {({ remainingTime }) => <Text>{formatTime(remainingTime)}</Text>}
         </CountdownCircleTimer>
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          setActive(!active);
-        }}
-      >
-        <Text>Start</Text>
-      </TouchableOpacity>
+      <SView className="p-2 items-center space-y-2">
+        <STouchableOpacity
+          className="rounded bg-cyan-500"
+          onPress={() => {
+            setActive(true);
+          }}
+        >
+          <SText className="text-3xl text-red-500 font-bold p-2 bg-blue-500 rounded-md">
+            Start
+          </SText>
+        </STouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setActive(false);
+          }}
+        >
+          <SText className="text-3xl text-red-500 font-bold p-2 bg-blue-500 rounded-md">
+            Stop
+          </SText>
+        </TouchableOpacity>
+      </SView>
       <TimerPickerModal
         visible={showPicker}
         setIsVisible={setShowPicker}
@@ -57,6 +66,8 @@ export default function Index() {
             Number(pickedDuration.minutes) * 60 +
             Number(pickedDuration.seconds),
           );
+          setActive(false);
+
           setShowPicker(false);
         }}
         modalTitle="Set Alarm"
@@ -72,6 +83,6 @@ export default function Index() {
           overlayOpacity: 0.2,
         }}
       />
-    </View>
+    </SView>
   );
 }
