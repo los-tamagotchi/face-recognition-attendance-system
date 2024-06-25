@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TimerPickerModal } from "react-native-timer-picker";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { SText, STouchableOpacity, SView } from "../components/View";
 
@@ -19,6 +19,8 @@ export default function Index() {
   const [active, setActive] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [time, setTime] = useState(600);
+  const [timerKey, setTimerKey] = useState(0);
+
   return (
     <SView className="items-center flex-1 justify-center">
       <TouchableOpacity
@@ -27,22 +29,26 @@ export default function Index() {
         }}
       >
         <CountdownCircleTimer
+          key={timerKey}
           isPlaying={active}
           duration={time}
           colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
           colorsTime={[7, 5, 2, 0]}
+          size={280}
         >
-          {({ remainingTime }) => <Text>{formatTime(remainingTime)}</Text>}
+          {({ remainingTime }) => (
+            <SText className="text-3xl">{formatTime(remainingTime)}</SText>
+          )}
         </CountdownCircleTimer>
       </TouchableOpacity>
-      <SView className="p-2 items-center space-y-2">
+      <SView className="items-center space-y-2 gap-5 pt-6">
         <STouchableOpacity
           className="rounded bg-cyan-500"
           onPress={() => {
             setActive(true);
           }}
         >
-          <SText className="text-3xl text-red-500 font-bold p-2 bg-blue-500 rounded-md">
+          <SText className="text-3xl text-white font-bold py-2 px-3 bg-green-500 rounded-md">
             Start
           </SText>
         </STouchableOpacity>
@@ -51,7 +57,7 @@ export default function Index() {
             setActive(false);
           }}
         >
-          <SText className="text-3xl text-red-500 font-bold p-2 bg-blue-500 rounded-md">
+          <SText className="text-3xl text-white font-bold py-2 px-3.5 bg-red-500 rounded-md">
             Stop
           </SText>
         </TouchableOpacity>
@@ -63,14 +69,14 @@ export default function Index() {
           console.log(pickedDuration);
           setTime(
             Number(pickedDuration.hours) * 3600 +
-            Number(pickedDuration.minutes) * 60 +
-            Number(pickedDuration.seconds),
+              Number(pickedDuration.minutes) * 60 +
+              Number(pickedDuration.seconds),
           );
           setActive(false);
-
+          setTimerKey((prevKey) => prevKey + 1);
           setShowPicker(false);
         }}
-        modalTitle="Set Alarm"
+        modalTitle="Setear tiempo"
         onCancel={() => setShowPicker(false)}
         closeOnOverlayPress
         // Audio={Audio}
