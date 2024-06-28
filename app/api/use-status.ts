@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { Status } from "./client";
+import { Status, client } from "./client";
 
 const getStatus = async (): Promise<Status> => {
   try {
-    const { data } = await axios.get("/status");
+    const { data } = await client.get("/status");
     return data;
   } catch (error) {
     throw error;

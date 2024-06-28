@@ -1,10 +1,9 @@
 import { UseMutationOptions } from "@tanstack/react-query";
-import axios from "axios";
-import { Status, useBaseMutation } from "./client";
+import { Status, client, useBaseMutation, Request } from "./client";
 
-const activateAssistance = async ({ ...rest }: Status) => {
+const activateAssistance = async ({ ...rest }: Request) => {
   try {
-    const { data } = await axios.post("/activate", rest);
+    const { data } = await client.post("/on", rest);
     return data;
   } catch (error) {
     throw error;
@@ -12,10 +11,28 @@ const activateAssistance = async ({ ...rest }: Status) => {
 };
 
 export const useActivate = (
-  props?: UseMutationOptions<Status, string, Status, any>,
+  props?: UseMutationOptions<Status, string, Request, any>,
 ) =>
-  useBaseMutation<Status, Status>({
+  useBaseMutation<Request, Status>({
     mutationKey: ["activateAssistance"],
     mutationFn: activateAssistance,
     ...props,
   });
+
+  const deactivateAssistance = async ({ ...rest }: Request) => {
+    try {
+      const { data } = await client.post("/off", rest);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  
+  export const useDeactivate = (
+    props?: UseMutationOptions<Status, string, Request, any>,
+  ) =>
+    useBaseMutation<Request, Status>({
+      mutationKey: ["deactivateAssistance"],
+      mutationFn: deactivateAssistance,
+      ...props,
+    });
