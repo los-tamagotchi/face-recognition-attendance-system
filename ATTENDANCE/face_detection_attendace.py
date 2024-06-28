@@ -6,9 +6,19 @@ from datetime import datetime
 from datetime import timedelta
 import face_recognition
 
+# # Rutas de los directorios y archivos
+# path = r'C:\Users\Admin\Desktop\face-recognition-attendance-system\ATTENDANCE\image_folder'
+# path_to_attendance_folder = r'C:\Users\Admin\Desktop\face-recognition-attendance-system\ATTENDANCE'
+# path_to_csv = os.path.join(path_to_attendance_folder, 'Attendance.csv')
+#
+# # Verificar si el archivo de asistencia existe y crearlo si no
+# if not os.path.exists(path_to_csv):
+#     with open(path_to_csv, 'w') as f:
+#         f.write("Name,Time\n")  # Escribir la cabecera si el archivo se crea nuevo
+
 # Rutas de los directorios y archivos
-path = r'C:\Users\Admin\Desktop\face-recognition-attendance-system\ATTENDANCE\image_folder'
-path_to_attendance_folder = r'C:\Users\Admin\Desktop\face-recognition-attendance-system\ATTENDANCE'
+path = r'/home/polvos-magicos/dev/visual-computing/face-recognition-attendance-system/ATTENDANCE/image_folder'
+path_to_attendance_folder = r'/home/polvos-magicos/dev/visual-computing/face-recognition-attendance-system/ATTENDANCE'
 path_to_csv = os.path.join(path_to_attendance_folder, 'Attendance.csv')
 
 # Verificar si el archivo de asistencia existe y crearlo si no
@@ -67,7 +77,7 @@ def findEncodings(images):
 encodeListKnown = findEncodings(images)
 print('Encoding Complete')
 
-url = 'http://<ip>/cam-hi.jpg'
+url = 'http://192.168.0.156/cam-mid.jpg'
 
 def business():
     print("shamaste")
