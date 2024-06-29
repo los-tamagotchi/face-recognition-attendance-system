@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { TimerPickerModal } from "react-native-timer-picker";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
-import { SText, STouchableOpacity, SView } from "../components/View";
-import { useStatus } from "../api/use-status";
+import { SText, STouchableOpacity, SView } from "../../components/View";
+import { useStatus } from "../../api/use-status";
 import { useFocusEffect } from "expo-router";
-import { useActivate, useDeactivate } from "@/api/use-activate";
+import { useActivate, useDeactivate } from "../../api/use-activate";
 
 const formatTime = (remainingTime: number) => {
   const hours = Math.floor(remainingTime / 3600);
@@ -18,7 +18,7 @@ const formatTime = (remainingTime: number) => {
   return `${newHours}:${newMinutes}:${newSeconds}`;
 };
 
-export default function Index() {
+export default function HomeScreen() {
   const [active, setActive] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [initialTime, setInitialTime] = useState(300);
@@ -48,7 +48,6 @@ export default function Index() {
         }
       }    
   }, [data])
-
 
   return (
     <SView className="items-center flex-1 justify-center">
