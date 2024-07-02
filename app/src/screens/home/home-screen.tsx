@@ -1,22 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { TimerPickerModal } from "react-native-timer-picker";
 import { TouchableOpacity } from "react-native";
-import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { SText, STouchableOpacity, SView } from "../../components/View";
 import { useStatus } from "../../api/use-status";
 import { useFocusEffect } from "expo-router";
 import { useActivate, useDeactivate } from "../../api/use-activate";
-
-const formatTime = (remainingTime: number) => {
-  const hours = Math.floor(remainingTime / 3600);
-  const minutes = Math.floor((remainingTime % 3600) / 60);
-  const seconds = remainingTime % 60;
-
-  const newSeconds = seconds < 10 ? "0" + seconds.toString() : seconds;
-  const newMinutes = minutes < 10 ? "0" + minutes.toString() : minutes;
-  const newHours = hours < 10 ? "0" + hours.toString() : hours;
-  return `${newHours}:${newMinutes}:${newSeconds}`;
-};
+import { Timer } from "./timer";
 
 export default function HomeScreen() {
   const [active, setActive] = useState(false);
@@ -49,37 +38,22 @@ export default function HomeScreen() {
       }    
   }, [data])
 
+  
+  const timerData = {
+    timerKey,
+    state: active,
+    duration: initialTime,
+    initialRemainingTime: serverRemainingTime,
+  };
+
   return (
     <SView className="items-center flex-1 justify-center">
       <TouchableOpacity
         onPress={() => {
           setShowPicker(!showPicker);
         }}
-      >{
-        data &&
-        <CountdownCircleTimer
-          key={timerKey}
-          isPlaying={active}
-          duration={initialTime}
-          initialRemainingTime={serverRemainingTime}
-          colors={["#034799", "#F7B801", "#A30000", "#A30000"]}
-          colorsTime={[7, 5, 2, 0]}
-          size={280}
-          onComplete={() => {
-            deactivate({
-              active: false,
-              initialTime: 0,
-            }
-            )
-            setActive(false);
-            setTimerKey((prevKey) => prevKey + 1);
-          }}
-        >
-          {({ remainingTime }) => (
-            <SText className="text-3xl">{formatTime(remainingTime)}</SText>
-          )}
-        </CountdownCircleTimer>
-      }
+      >
+        <Timer data={timerData} setInactive={() => {setActive(false)}} deactivate={deactivate} setTimerKey={setTimerKey} />
       </TouchableOpacity>
       <SView className="items-center space-y-2 gap-5 pt-6">
         <STouchableOpacity
