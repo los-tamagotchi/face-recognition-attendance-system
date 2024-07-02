@@ -50,24 +50,24 @@ def findEncodings(images):
 #    with open(path_to_csv, 'r+') as f:
 #        # Leer todas las líneas existentes en el archivo CSV
 #        lines = f.readlines()
-#        
+
 #        # Obtener la hora actual
 #        now = datetime.now()
-#        
+
 #        # Definir el lapso de tiempo permitido (1 hora)
 #        time_threshold = timedelta(hours=1)
-#        
+
 #        # Recorrer todas las líneas para verificar si ya existe una entrada reciente
 #        already_marked = False
 #        for line in lines:
 #            entry_name, entry_time_str = line.strip().split(',')
 #            entry_time = datetime.strptime(entry_time_str, '%H:%M:%S')
-#            
+
 #            # Verificar si el nombre coincide y el tiempo está dentro del lapso permitido
 #            if name == entry_name and now - entry_time <= time_threshold:
 #                already_marked = True
 #                break
-#        
+
 #        # Si no está marcado aún dentro del lapso de tiempo permitido, añadir la entrada
 #        if not already_marked:
 #            dtString = now.strftime('%H:%M:%S')
@@ -77,9 +77,7 @@ def findEncodings(images):
 encodeListKnown = findEncodings(images)
 print('Encoding Complete')
 
-url = 'http://192.168.0.156/cam-mid.jpg'
-
-def business():
+def business(url):
     print("shamaste")
     img_resp = urllib.request.urlopen(url)
     print("shamaste1")
@@ -116,7 +114,7 @@ def business():
             cv2.rectangle(img, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
             cv2.putText(img, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
             print("damaris")
-            
+
             #markAttendance(name)
 
         print("sdfg1")
