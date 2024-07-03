@@ -5,7 +5,18 @@ import { SText, STouchableOpacity, SView } from "../../components/View";
 import { useStatus } from "../../api/use-status";
 import { useFocusEffect } from "expo-router";
 import { useActivate, useDeactivate } from "../../api/use-activate";
-import { Timer } from "./timer";
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+
+const formatTime = (remainingTime: number) => {
+  const hours = Math.floor(remainingTime / 3600);
+  const minutes = Math.floor((remainingTime % 3600) / 60);
+  const seconds = remainingTime % 60;
+
+  const newSeconds = seconds < 10 ? "0" + seconds.toString() : seconds;
+  const newMinutes = minutes < 10 ? "0" + minutes.toString() : minutes;
+  const newHours = hours < 10 ? "0" + hours.toString() : hours;
+  return `${newHours}:${newMinutes}:${newSeconds}`;
+};
 
 export default function HomeScreen() {
   const [active, setActive] = useState(false);
@@ -27,17 +38,15 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (data) {
-        console.log(data)
         setInitialTime(data.initialTime)
         setActive(data.active)
-        console.log(data.remainingTime)
         setServerRemainingTime(data.remainingTime)
         if (data.remainingTime == 0) {
           setServerRemainingTime(data.initialTime)
         }
+        setTimerKey((prevKey) => prevKey + 1)
       }    
   }, [data])
-
   
   const timerData = {
     timerKey,
@@ -53,7 +62,31 @@ export default function HomeScreen() {
           setShowPicker(!showPicker);
         }}
       >
-        <Timer data={timerData} setInactive={() => {setActive(false)}} deactivate={deactivate} setTimerKey={setTimerKey} />
+{
+        data &&
+        <CountdownCircleTimer
+          key={timerKey}
+          isPlaying={active}
+          duration={initialTime}
+          initialRemainingTime={serverRemainingTime}
+          colors={["#034799", "#F7B801", "#A30000", "#A30000"]}
+          colorsTime={[7, 5, 2, 0]}
+          size={280}
+          onComplete={() => {
+            deactivate({
+              active: false,
+              initialTime: 0,
+            }
+            )
+            setActive(false);
+            setTimerKey((prevKey) => prevKey + 1);
+          }}
+        >
+          {({ remainingTime }) => (
+            <SText className="text-3xl">{formatTime(remainingTime)}</SText>
+          )}
+        </CountdownCircleTimer>
+      }
       </TouchableOpacity>
       <SView className="items-center space-y-2 gap-5 pt-6">
         <STouchableOpacity
@@ -92,7 +125,6 @@ export default function HomeScreen() {
         visible={showPicker}
         setIsVisible={setShowPicker}
         onConfirm={(pickedDuration) => {
-          console.log(pickedDuration);
           setInitialTime(
             Number(pickedDuration.hours) * 3600 +
               Number(pickedDuration.minutes) * 60 +

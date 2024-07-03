@@ -37,7 +37,7 @@ def turn_off():
     data = request.get_json()
     active = data.get('active')
     initial_time = data.get('intialTime')
-    print(remaining_time)
+    print("remaining time: ", remaining_time)
 
     return jsonify(message="Hello, World", active=active, remaining_time=remaining_time), 200
 
