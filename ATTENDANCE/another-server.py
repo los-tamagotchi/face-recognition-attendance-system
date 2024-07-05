@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, send_file
 from threading import Thread
 import requests
 from face_detection_attendace import business
@@ -10,6 +10,7 @@ initial_time = 600
 remaining_time = 600
 
 camera_url = "http://192.168.0.156/cam-mid.jpg"
+csv_path = "ATTENDANCE/Attendance.csv"
 
 @app.route('/on', methods=['POST'])
 def turn_on():
@@ -66,6 +67,12 @@ def video_feed():
 
     return Response(generate(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/reports', methods=['GET'])
+def get_reports():
+    return send_file(csv_path, as_attachment=True)
+
+
 
 def run_flask():
     app.run(host='0.0.0.0', port=8000)

@@ -12,6 +12,7 @@ const TabBarNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
+        headerShown: false,
         tabBarStyle: {
           height: 70,
           paddingBottom: 10,

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Text, View, StyleSheet, FlatList, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
+import RNFetchBlob from 'rn-fetch-blob';
+
 
 export default function Attendance() {
   const [selectedDate, setSelectedDate] = useState('');
@@ -13,9 +15,30 @@ export default function Attendance() {
     setToday(formattedDate);
   }, []);
   
-  const handleDownload = () => {
-    // descargar el archivo CSV
-  };
+  const handleDownload = async () => {
+  /*  try {
+      const { config, fs } = RNFetchBlob;
+      let DownloadDir = fs.dirs.DownloadDir;
+      let date = new Date();
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          notification: true,
+          path: `${DownloadDir}/Attendance_${Math.floor(date.getTime() + date.getSeconds() / 2)}.csv`,
+          description: 'CSV file',
+        },
+      };
+      config(options)
+        .fetch('GET', 'aaa') //poner el path
+        .then((res) => {
+          console.log('The file saved to ', res.path());
+        });
+    } catch (error) {
+      console.error(error);
+      }; */
+    }
+  
 
   const recentReports = [
     { id: '1', date: '2024-07-03', downloads: 5 },
@@ -43,7 +66,7 @@ return (
           selectedDayBackgroundColor: '#4849A1',
         }}
       />
-
+      
       <View style={styles.downloadSection}>
         <Text style={styles.sectionTitle}>Descargar Reporte</Text>
         <TouchableOpacity style={styles.button} onPress={handleDownload}>
@@ -64,7 +87,7 @@ return (
             </View>
           )}
           style={styles.flatList}
-          scrollEnabled={false} // Deshabilita el scroll de FlatList
+          scrollEnabled={false}
         />
       </View>
     </ScrollView>
