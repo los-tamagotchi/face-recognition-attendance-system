@@ -21,11 +21,11 @@ path = r'/home/damaris/Coding/face-recognition-attendance-system/ATTENDANCE/imag
 path_to_attendance_folder = r'/home/damaris/Coding/face-recognition-attendance-system/ATTENDANCE/'
 path_to_csv = os.path.join(path_to_attendance_folder, 'Attendance.csv')
 
-## Verificar si el archivo de asistencia existe y crearlo si no
-#if not os.path.exists(path_to_csv):
-#    with open(path_to_csv, 'w') as f:
-#        f.write("Name,Time\n")  # Escribir la cabecera si el archivo se crea nuevo
-#
+# Verificar si el archivo de asistencia existe y crearlo si no
+if not os.path.exists(path_to_csv):
+    with open(path_to_csv, 'w') as f:
+        f.write("Name,Time\n")  # Escribir la cabecera si el archivo se crea nuevo
+
 images = []
 classNames = []
 myList = os.listdir(path)
@@ -36,37 +36,39 @@ for cl in myList:
     classNames.append(os.path.splitext(cl)[0])
 #print(classNames)
 
-
 def findEncodings(images):
     encodeList = []
     for img in images:
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         encode = face_recognition.face_encodings(img)[0]
         encodeList.append(encode)
-    print('Encoding Complete')
-#    
-#def markAttendance(name):
-#    with open(path_to_csv, 'r+') as f:
-#        # Leer todas las líneas existentes en el archivo CSV
-#        lines = f.readlines()
-#        # Obtener la hora actual
-#        now = datetime.now()
-#        # Definir el lapso de tiempo permitido (1 hora)
-#        time_threshold = timedelta(hours=1)
-#        # Recorrer todas las líneas para verificar si ya existe una entrada reciente
-#        already_marked = False
-#        for line in lines:
-#            entry_name, entry_time_str = line.strip().split(',')
-#            entry_time = datetime.strptime(entry_time_str, '%H:%M:%S')
-#            # Verificar si el nombre coincide y el tiempo está dentro del lapso permitido
-#            if name == entry_name and now - entry_time <= time_threshold:
-#                already_marked = True
-#                break
-#        # Si no está marcado aún dentro del lapso de tiempo permitido, añadir la entrada
-#        if not already_marked:
-#            dtString = now.strftime('%H:%M:%S')
-#            f.write(f'{name},{dtString}\n')
-#
+    return encodeList  # Add this line to return the encodings
+
+def markAttendance(name):
+    with open(path_to_csv, 'r+') as f:
+        # Leer todas las líneas existentes en el archivo CSV
+        lines = f.readlines()
+        # Obtener la hora actual
+        now = datetime.now()
+        # Definir el lapso de tiempo permitido (1 hora)
+        time_threshold = timedelta(hours=1)
+        # Recorrer todas las líneas para verificar si ya existe una entrada reciente
+        already_marked = False
+        for line in lines[1:]:  # Skip the header line
+            entry_name, entry_time_str = line.strip().split(',')
+            entry_time = datetime.strptime(entry_time_str, '%H:%M:%S')
+            # Verificar si el nombre coincide y el tiempo está dentro del lapso permitido
+            if name == entry_name:
+                already_marked = True
+                break
+        # Si no está marcado aún dentro del lapso de tiempo permitido, añadir la entrada
+        if not already_marked:
+            dtString = now.strftime('%H:%M:%S')
+            f.write(f'{name},{dtString}\n')
+
+
+encodeListKnown = findEncodings(images)  # Make sure to call the function that returns the encodings
+print('Encoding Complete')
 
 def business(url):
     print("shamaste")
@@ -106,13 +108,13 @@ def business(url):
             cv2.putText(img, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
             print("damaris")
 
-           # markAttendance(name)
+            markAttendance(name)
 
         print("sdfg1")
-        cv2.imshow('Webcam', img)
+        #cv2.imshow('Webcam', img)
         print("sdfg2")
-        key = cv2.waitKey(1) & 0xFF
-        if key == ord('q'):
-            break
+        #key = cv2.waitKey(1) & 0xFF
+        #if key == ord('q'):
+        #    break
 
 cv2.destroyAllWindows()

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, Text, View, StyleSheet, FlatList, ScrollView } from 'react-native';
+import { TouchableOpacity, Text, View, StyleSheet, FlatList, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFS from 'react-native-fs';
+
 
 export default function Attendance() {
   const [selectedDate, setSelectedDate] = useState('');
@@ -15,29 +16,8 @@ export default function Attendance() {
   }, []);
   
   const handleDownload = async () => {
-   try {
-      const { config, fs } = RNFetchBlob;
-      let DownloadDir = fs.dirs.DownloadDir;
-      let date = new Date();
-      let options = {
-        fileCache: true,
-        addAndroidDownloads: {
-          useDownloadManager: true,
-          notification: true,
-          path: `${DownloadDir}/Attendance_${Math.floor(date.getTime() + date.getSeconds() / 2)}.csv`,
-          description: 'CSV file',
-        },
-      };
-      config(options)
-        .fetch('GET', 'http://172.20.10.5:8000/reports') //poner el path
-        .then((res) => {
-          console.log('The file saved to ', res.path());
-        });
-    } catch (error) {
-      console.error(error);
-      };
-    }
-  
+    // to do :(
+  };
 
   const recentReports = [
     { id: '1', date: '2024-07-03', downloads: 5 },
