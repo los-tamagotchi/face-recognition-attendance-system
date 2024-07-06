@@ -10,6 +10,8 @@ ya mira en natural language no más
 - de ahi ese enlace de la http://<IP_ADDRESS>/cam-mid.jpg vas a pegarlo variable `url` del face_detection_attendance.py
 - runneas el program and there u go!
 
+recuerda este trauma: pip uninstall urllib3
+
 
 puedes poner las imágenes que desees en image_folder
 

@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
 import RNFetchBlob from 'rn-fetch-blob';
 
-
 export default function Attendance() {
   const [selectedDate, setSelectedDate] = useState('');
   const [today, setToday] = useState('');
@@ -16,7 +15,7 @@ export default function Attendance() {
   }, []);
   
   const handleDownload = async () => {
-  /*  try {
+   try {
       const { config, fs } = RNFetchBlob;
       let DownloadDir = fs.dirs.DownloadDir;
       let date = new Date();
@@ -30,13 +29,13 @@ export default function Attendance() {
         },
       };
       config(options)
-        .fetch('GET', 'aaa') //poner el path
+        .fetch('GET', 'http://172.20.10.5:8000/reports') //poner el path
         .then((res) => {
           console.log('The file saved to ', res.path());
         });
     } catch (error) {
       console.error(error);
-      }; */
+      };
     }
   
 

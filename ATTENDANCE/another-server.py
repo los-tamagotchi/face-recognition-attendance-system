@@ -10,7 +10,7 @@ initial_time = 600
 remaining_time = 600
 
 camera_url = "http://192.168.0.156/cam-mid.jpg"
-csv_path = "ATTENDANCE/Attendance.csv"
+csv_path = "/home/damaris/Coding/face-recognition-attendance-system/ATTENDANCE/Attendance.csv"
 
 @app.route('/on', methods=['POST'])
 def turn_on():
@@ -49,7 +49,7 @@ def get_status():
     print(remaining_time)
     return jsonify(active=active, remainingTime=remaining_time, initialTime=initial_time), 200
 
-@app.route('/video_feed')
+#@app.route('/video_feed')
 def video_feed():
     def generate():
         while True:
