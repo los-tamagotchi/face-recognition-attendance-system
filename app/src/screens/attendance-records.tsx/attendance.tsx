@@ -1,9 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, Text, View, StyleSheet, FlatList, ScrollView, Alert } from 'react-native';
+import { TouchableOpacity, Text, View, StyleSheet, FlatList, ScrollView, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Calendar } from 'react-native-calendars';
-import RNFS from 'react-native-fs';
+import * as FileSystem from 'expo-file-system';
+import { shareAsync } from 'expo-sharing';
 
+
+ const downloadFromUrl = async () => {
+    const filename = "reports.csv";
+    const result = await FileSystem.downloadAsync(
+      'http://192.168.1.38:8000/reports',
+      FileSystem.documentDirectory + filename
+    );
+    console.log(result);
+
+    save(result.uri, filename, result.headers["Content-Type"]);
+  };
+
+  const downloadFromAPI = async () => {
+    const filename = "reports.csv";
+    const localhost = Platform.OS === "android" ? "10.0.2.2" : "127.0.0.1";
+    const result = await FileSystem.downloadAsync(
+      `http://${localhost}:8000/reports`,
+      FileSystem.documentDirectory + filename,
+      {
+        headers: {
+          "MyHeader": "MyValue"
+        }
+      }
+    );
+    console.log(result);
+    save(result.uri, filename, result.headers["Content-Type"]);
+  };
+
+  const save = async (uri, filename, mimetype) => {
+    if (Platform.OS === "android") {
+      const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+      if (permissions.granted) {
+        const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+        await FileSystem.StorageAccessFramework.createFileAsync(permissions.directoryUri, filename, mimetype)
+          .then(async (uri) => {
+            await FileSystem.writeAsStringAsync(uri, base64, { encoding: FileSystem.EncodingType.Base64 });
+          })
+          .catch(e => console.log(e));
+      } else {
+        shareAsync(uri);
+      }
+    } else {
+      shareAsync(uri);
+    }
+  };
 
 export default function Attendance() {
   const [selectedDate, setSelectedDate] = useState('');
@@ -14,10 +60,6 @@ export default function Attendance() {
     const formattedDate = date.toISOString().split('T')[0];
     setToday(formattedDate);
   }, []);
-  
-  const handleDownload = async () => {
-    // to do :(
-  };
 
   const recentReports = [
     { id: '1', date: '2024-07-03', downloads: 5 },
@@ -48,7 +90,7 @@ return (
       
       <View style={styles.downloadSection}>
         <Text style={styles.sectionTitle}>Descargar Reporte</Text>
-        <TouchableOpacity style={styles.button} onPress={handleDownload}>
+        <TouchableOpacity style={styles.button} onPress={downloadFromUrl}>
           <Icon name="download" size={20} color="#fff" style={styles.buttonIcon} />
           <Text style={styles.buttonText}>Descargar (.csv)</Text>
         </TouchableOpacity>
