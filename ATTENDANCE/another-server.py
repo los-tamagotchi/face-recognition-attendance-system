@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response, send_file
+from flask import Flask, request, jsonify, Response, send_file, send_from_directory
 from threading import Thread
 import requests
 from face_detection_attendace import business
@@ -48,6 +48,13 @@ def get_status():
     print(initial_time)
     print(remaining_time)
     return jsonify(active=active, remainingTime=remaining_time, initialTime=initial_time), 200
+
+@app.route('/image/<filename>', methods=['GET'])
+def get_image(filename):
+    try:
+        return send_from_directory(image_folder, filename)
+    except Exception as e:
+        return jsonify(message=f"Error fetching image: {e}"), 500
 
 #@app.route('/video_feed')
 def video_feed():
