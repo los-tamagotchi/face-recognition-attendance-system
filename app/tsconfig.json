@@ -12,6 +12,8 @@
   "include": [
     "**/**/*.ts",
     "**/**/*.tsx",
+    "**/**/**/*.ts",
+    "**/**/**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "**/attendance-records.tsx/*.tsx"

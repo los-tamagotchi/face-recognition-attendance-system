@@ -1,8 +1,7 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/home/home-screen';
-import Attendance from '../screens/attendance-records.tsx/attendance';
+import Attendance from '../screens/attendance-records/attendance';
 import { VideoStream } from '../screens/streaming/streaming-screen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -41,9 +40,9 @@ const TabBarNavigator = () => {
         }}
       />
       <Tab.Screen 
-        name="Reportes" 
-        component={Attendance} 
-        options={{
+          name="Reportes" 
+          component={Attendance} 
+          options={{
           tabBarIcon: ({ color, size }) => (
             <Icon name="file-table" size={size} color={color} />
           )
