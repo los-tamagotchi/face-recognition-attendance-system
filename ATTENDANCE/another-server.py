@@ -1,8 +1,10 @@
+import csv
 from flask import Flask, request, jsonify, Response, send_file, send_from_directory
 from threading import Thread
 import requests
 from face_detection_attendace import business
 import time
+from data import student_info
 
 app = Flask(__name__)
 active = False
@@ -55,6 +57,27 @@ def get_image(filename):
         return send_from_directory(image_folder, filename)
     except Exception as e:
         return jsonify(message=f"Error fetching image: {e}"), 500
+
+@app.route('/attendance-list', methods=['GET'])
+def attendance_list():
+    attendance_records = []
+
+    with open(csv_path, 'r') as f:
+        reader = csv.reader(f)
+        next(reader)
+        for row in reader:
+            codigo, time_marked = row
+            full_name = student_info.get(codigo, "Nombre Desconocido")
+            image_url = request.host_url + 'image/' + codigo + '.jpg'
+            attendance_records.append({
+                "fullName": full_name,
+                "studentCode": codigo,
+                "timeMarked": time_marked,
+                "imageUrl": image_url
+            })
+
+    return jsonify(attendance_records), 200
+
 
 #@app.route('/video_feed')
 def video_feed():

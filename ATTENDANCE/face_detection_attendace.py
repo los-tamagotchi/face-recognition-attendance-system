@@ -50,8 +50,10 @@ def markAttendance(name):
         lines = f.readlines()
         # Obtener la hora actual
         now = datetime.now()
+
         # Definir el lapso de tiempo permitido (1 hora)
-        time_threshold = timedelta(hours=1)
+        #time_threshold = timedelta(hours=1)
+
         # Recorrer todas las líneas para verificar si ya existe una entrada reciente
         already_marked = False
         for line in lines[1:]:  # Skip the header line
@@ -67,7 +69,7 @@ def markAttendance(name):
             f.write(f'{name},{dtString}\n')
 
 
-encodeListKnown = findEncodings(images)  # Make sure to call the function that returns the encodings
+encodeListKnown = findEncodings(images)
 print('Encoding Complete')
 
 def business(url):
