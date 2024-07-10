@@ -1,31 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image } from 'react-native';
 import { SImage, SText, SView } from '@/components/View';
-
-type Person = {
-  id: string;
-  name: string;
-  arrivalTime: string;
-  photo: string;
-}
-
-const persons: Person[] = [
-  { id: '1', name: 'John Doe', arrivalTime: "10:23", photo: 'http://192.168.0.164:8000/image/22200082.jpg' },
-  { id: '2', name: 'Jane Smith', arrivalTime: "10:22", photo: 'https://via.placeholder.com/150' },
-  { id: '3', name: 'Sam Johnson', arrivalTime: "9:30", photo: 'https://via.placeholder.com/150' },
-  { id: '4', name: 'John Doe', arrivalTime: "10:23", photo: 'http://192.168.0.164:8000/image/22200082.jpg' },
-  { id: '5', name: 'Jane Smith', arrivalTime: "10:22", photo: 'https://via.placeholder.com/150' },
-  { id: '6', name: 'Sam Johnson', arrivalTime: "9:30", photo: 'https://via.placeholder.com/150' },
-];
+import { Student } from '../../../api/client';
+import { useList } from '../../../api/use-list';
 
 export const List = () => {
 
-  const renderPersonCard = ({ item }: { item: Person }) => (
+  const { data, refetch } = useList();
+
+  const [students, setStudents] = useState<Student[] | undefined>([])
+
+  useEffect(() => {
+    if (data) {
+      setStudents(data);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetch();
+    }, 1000);
+
+    console.log(students)
+    return () => clearInterval(intervalId);
+  }, [refetch]);
+
+  const renderPersonCard = ({ item }: { item: Student }) => (
     <SView className="flex flex-row items-center bg-gray-100 p-4 rounded-lg shadow-md mb-4">
-      <SImage source={{ uri: item.photo }} className="w-12 h-12 rounded-full mr-4" />
+      <SImage source={{ uri: item.imageUrl }} className="w-12 h-12 rounded-full mr-4" />
       <SView className="flex-1">
-        <SText className="text-lg font-bold">{item.name}</SText>
-        <SText className="text-base">Hora de llegada: {item.arrivalTime}</SText>
+        <SText className="text-lg font-bold">{item.fullName}</SText>
+        <SText>{item.studentCode}</SText>
+        <SText className="text-base">Hora de llegada: {item.timeMarked}</SText>
       </SView>
     </SView>
   );
@@ -34,9 +40,9 @@ export const List = () => {
     <SView className="flex-1 bg-white p-4 m-4 rounded-lg shadow-md ">
       <SText className="text-lg font-bold mb-4">Estudiantes asistentes</SText>
       <FlatList
-        data={persons}
+        data={students}
         renderItem={renderPersonCard}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.studentCode}
       />
     </SView>
   );

@@ -2,13 +2,13 @@ import { UseMutationOptions, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
 export const client = axios.create({
-  baseURL: "http://192.168.0.164:8000",
+  baseURL: "http://192.168.1.66:8000",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Type for status object
+// Types
 
 export type Request = {
   active: boolean;
@@ -20,6 +20,13 @@ export type Status = {
   remainingTime: number;
   initialTime: number;
 };
+
+export type Student = {
+  fullName: string;
+  studentCode: string;
+  timeMarked: string;
+  imageUrl: string;
+}
 
 // Util for POST requests
 

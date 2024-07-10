@@ -2,7 +2,7 @@ import csv
 from flask import Flask, request, jsonify, Response, send_file, send_from_directory
 from threading import Thread
 import requests
-from face_detection_attendace import business
+from face_detection_attendace import business, path as image_folder
 import time
 from data import student_info
 
