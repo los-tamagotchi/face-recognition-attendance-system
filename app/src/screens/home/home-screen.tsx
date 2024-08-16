@@ -75,7 +75,7 @@ export default function HomeScreen() {
           onComplete={() => {
             deactivate({
               active: false,
-              initialTime: 0,
+              initialTime: initialTime,
             }
             )
             setActive(false);

@@ -17,8 +17,8 @@ import face_recognition
 #         f.write("Name,Time\n")  # Escribir la cabecera si el archivo se crea nuevo
 
 # Rutas de los directorios y archivos
-path = r'/home/damaris/Coding/face-recognition-attendance-system/ATTENDANCE/image_folder'
-path_to_attendance_folder = r'/home/damaris/Coding/face-recognition-attendance-system/ATTENDANCE/'
+path = os.path.expanduser('~/Documents/face-recognition-attendance-system/ATTENDANCE/image_folder')
+path_to_attendance_folder = os.path.expanduser('~/Documents/face-recognition-attendance-system/ATTENDANCE/')
 path_to_csv = os.path.join(path_to_attendance_folder, 'Attendance.csv')
 
 # Verificar si el archivo de asistencia existe y crearlo si no

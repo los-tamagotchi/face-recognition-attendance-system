@@ -1,4 +1,5 @@
 import csv
+import os
 from flask import Flask, request, jsonify, Response, send_file, send_from_directory
 from threading import Thread
 import requests
@@ -10,39 +11,43 @@ app = Flask(__name__)
 active = False
 initial_time = 600
 remaining_time = 600
+paused = True
 
-camera_url = "http://192.168.0.156/cam-mid.jpg"
-csv_path = "/home/damaris/Coding/face-recognition-attendance-system/ATTENDANCE/Attendance.csv"
+camera_url = "http://172.20.10.9/cam-mid.jpg"
+csv_path = os.path.expanduser('~/Documents/face-recognition-attendance-system/ATTENDANCE/Attendance.csv')
+
+def auto_turn_off():
+    global active, remaining_time, paused
+    while remaining_time > 0:
+        time.sleep(1)
+        if not paused:
+            remaining_time -= 1
+            print(f'Remaining time: {remaining_time}')
+    active = False
+
+Thread(target=auto_turn_off).start()
 
 @app.route('/on', methods=['POST'])
 def turn_on():
-    global active, remaining_time, initial_time
+    global active, remaining_time, initial_time, paused
     data = request.get_json()
     active = data.get('active')
     initial_time = data.get('initialTime')
     remaining_time = initial_time
-
-    if remaining_time > 0:
-        def auto_turn_off():
-            global active, remaining_time
-            for i in range(remaining_time):
-                time.sleep(1)
-                remaining_time -= 1
-            active = False
-
-    Thread(target=auto_turn_off).start()
+    paused = False
 
     return jsonify(message="Hello, World", active=active, remainingTime=remaining_time, initialTime=initial_time), 200
 
 @app.route('/off', methods=['POST'])
 def turn_off():
-    global active, initial_time
+    global active, initial_time, paused
     data = request.get_json()
     active = data.get('active')
-    initial_time = data.get('intialTime')
+    initial_time = data.get('initialTime')
+    paused = True
     print("remaining time: ", remaining_time)
 
-    return jsonify(message="Hello, World", active=active, remaining_time=remaining_time), 200
+    return jsonify(message="Hello, World", active=active, remaining_time=remaining_time, initialTime=initial_time), 200
 
 @app.route('/status', methods=['GET'])
 def get_status():
@@ -79,7 +84,7 @@ def attendance_list():
     return jsonify(attendance_records), 200
 
 
-#@app.route('/video_feed')
+@app.route('/video_feed')
 def video_feed():
     def generate():
         while True:

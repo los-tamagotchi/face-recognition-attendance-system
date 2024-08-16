@@ -1,8 +1,10 @@
 import { UseMutationOptions, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
+export const url = 'http://172.20.10.5:8000'
+
 export const client = axios.create({
-  baseURL: "http://192.168.1.66:8000",
+  baseURL: url,
   headers: {
     "Content-Type": "application/json",
   },
